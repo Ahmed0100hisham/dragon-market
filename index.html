@@ -1,0 +1,863 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dragon Market | Five Millennia of Chinese Heritage</title>
+  <meta name="description" content="Discover timeless traditional Chinese heritage clothing and authentic imperial cuisine.">
+  <link rel="stylesheet" href="css/styles.css">
+  <link rel="icon" type="image/x-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🐉</text></svg>">
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════════════════
+     LOADING SCREEN
+     ═══════════════════════════════════════════════════ -->
+<div id="loader" class="loading-screen">
+  <div class="loading-dragon"></div>
+  <div class="loading-text">龍 Dragon Market</div>
+  <div class="loading-progress">
+    <div id="loader-progress" class="loading-progress-bar"></div>
+  </div>
+  <div id="loader-percent" style="font-family:var(--font-display);font-size:0.6rem;color:rgba(255,255,255,0.4);margin-top:16px;letter-spacing:0.3em;">0%</div>
+</div>
+
+
+<!-- ═══════════════════════════════════════════════════
+     SCROLL PROGRESS BAR
+     ═══════════════════════════════════════════════════ -->
+<div class="scroll-progress" id="scroll-progress-bar"></div>
+
+<!-- ═══════════════════════════════════════════════════
+     TOAST NOTIFICATION
+     ═══════════════════════════════════════════════════ -->
+<div id="toast" class="toast"></div>
+
+<!-- ═══════════════════════════════════════════════════
+     BACK TO TOP BUTTON
+     ═══════════════════════════════════════════════════ -->
+<button id="back-to-top" class="back-to-top" aria-label="Back to top">
+  <svg width="40" height="40" viewBox="0 0 40 40">
+    <circle cx="20" cy="20" r="18" fill="none" stroke="rgba(212,175,55,0.15)" stroke-width="2"/>
+    <circle id="back-to-top-progress" cx="20" cy="20" r="18" fill="none" stroke="#D4AF37" stroke-width="2.5" stroke-dasharray="113.1" stroke-dashoffset="113.1" stroke-linecap="round" transform="rotate(-90 20 20)"/>
+    <path d="M14 22l6-6 6 6" fill="none" stroke="#D4AF37" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+  </svg>
+</button>
+
+<!-- ═══════════════════════════════════════════════════
+     NAVBAR
+     ═══════════════════════════════════════════════════ -->
+<nav class="navbar" id="navbar">
+  <div class="navbar-inner">
+    <div class="navbar-left">
+      <button id="hamburger-btn" class="hamburger" aria-label="Open menu"></button>
+      <button data-navigate="home" class="navbar-logo">Dragon Market</button>
+    </div>
+    <div class="navbar-links" id="nav-links">
+      <button class="nav-link" data-page="shop" data-navigate="shop">Clothes</button>
+      <button class="nav-link" data-page="food" data-navigate="food">Food</button>
+      <button class="nav-link" data-page="heritage" data-navigate="heritage">Heritage</button>
+      <button class="nav-link" data-page="offers" data-navigate="offers">Offers</button>
+      <button class="nav-link" data-page="story" data-navigate="story">Our Story</button>
+    </div>
+    <div class="navbar-actions">
+      <button class="nav-icon-btn" id="search-btn" aria-label="Search">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+      </button>
+      <button class="nav-icon-btn" data-navigate="wishlist" aria-label="Wishlist">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg>
+        <span id="wishlist-badge" class="nav-badge" style="display:none;">0</span>
+      </button>
+      <button class="nav-icon-btn" id="cart-btn" aria-label="Shopping bag">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+        <span id="cart-badge" class="nav-badge" style="display:none;">0</span>
+      </button>
+      <button class="dark-mode-toggle" id="dark-mode-btn" aria-label="Toggle dark mode"></button>
+    </div>
+  </div>
+</nav>
+
+<!-- Mobile Menu -->
+<div id="mobile-overlay" class="mobile-overlay"></div>
+<div id="mobile-menu" class="mobile-menu">
+  <div class="mobile-menu-header">
+    <span class="navbar-logo">Menu</span>
+    <button id="mobile-close-btn" style="color:var(--secondary);padding:10px;margin-right:-10px;" aria-label="Close menu">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+    </button>
+  </div>
+  <div class="mobile-menu-links">
+    <button class="mobile-menu-link" data-page="shop" data-navigate="shop">Clothes</button>
+    <button class="mobile-menu-link" data-page="food" data-navigate="food">Food</button>
+    <button class="mobile-menu-link" data-page="heritage" data-navigate="heritage">Heritage</button>
+    <button class="mobile-menu-link" data-page="offers" data-navigate="offers">Offers</button>
+    <button class="mobile-menu-link" data-page="contact" data-navigate="contact">Contact</button>
+  </div>
+  <div style="margin-top:auto;padding-top:24px;border-top:1px solid var(--surface-low);">
+    <button class="mobile-menu-link" style="border:none;padding:12px 0;font-size:0.8rem;color:var(--secondary);" data-navigate="wishlist">My Wishlist</button>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════
+     MAIN CONTENT
+     ═══════════════════════════════════════════════════ -->
+<main>
+
+  <!-- ════════════════════════════════════════
+       PAGE: HOME
+       ════════════════════════════════════════ -->
+  <div id="page-home" class="page-section active">
+
+    <!-- Cinematic Hero -->
+    <section class="hero film-grain">
+      <div id="hero-bg" class="hero-bg" style="background-image:url('images/heritage/hero-palace.jpg')"></div>
+      <div class="hero-overlay-dark"></div>
+      <div class="hero-overlay-gradient-bottom"></div>
+      <div class="hero-overlay-gradient-sides"></div>
+
+      <canvas id="particle-canvas"></canvas>
+
+      <!-- Floating Chinese Characters -->
+      <span class="floating-char" style="left:5%;top:15%;font-size:120px;animation:charFloat 8s ease-in-out infinite 0s;">龍</span>
+      <span class="floating-char" style="left:85%;top:20%;font-size:100px;animation:charFloat 8s ease-in-out infinite 1.5s;">鳳</span>
+      <span class="floating-char" style="left:10%;top:70%;font-size:80px;animation:charFloat 8s ease-in-out infinite 3s;">絲</span>
+      <span class="floating-char" style="left:90%;top:65%;font-size:90px;animation:charFloat 8s ease-in-out infinite 0.5s;">韻</span>
+      <span class="floating-char" style="left:50%;top:10%;font-size:70px;animation:charFloat 8s ease-in-out infinite 2s;">華</span>
+      <span class="floating-char" style="left:75%;top:80%;font-size:60px;animation:charFloat 8s ease-in-out infinite 4s;">禮</span>
+
+      <!-- Spinning Rings -->
+      <div class="spin-ring" style="width:600px;height:600px;"></div>
+      <div class="spin-ring" style="width:400px;height:400px;animation-direction:reverse;border-color:rgba(212,175,55,0.06);"></div>
+
+      <!-- Gold Particles -->
+      <div class="gold-particle" style="top:25%;left:25%;"></div>
+      <div class="gold-particle" style="top:33%;right:33%;animation-delay:1s;width:4px;height:4px;"></div>
+      <div class="gold-particle" style="bottom:33%;left:50%;animation-delay:2s;width:3px;height:3px;"></div>
+
+      <!-- Hero Content -->
+      <div class="hero-content">
+        <div class="hero-badge hero-anim" data-transform="translateY(20px)">
+          <span>五千年的 · Five Millennia of Civilization</span>
+        </div>
+        <h1 class="hero-title hero-anim" data-transform="translateY(40px)">
+          <span>Dragon</span>
+          <span class="text-gradient-gold">Market</span>
+        </h1>
+        <div class="hero-line hero-anim" data-transform="scaleX(0)"></div>
+        <p class="hero-subtitle hero-anim" data-transform="translateY(20px)">
+          Discover the timeless beauty of traditional Chinese heritage clothing and authentic imperial cuisine. Every piece tells a story spanning thousands of years.
+        </p>
+        <div class="hero-buttons hero-anim" data-transform="translateY(20px)">
+          <button class="hero-btn-primary" data-navigate="shop">
+            <span style="position:relative;z-index:1;">Heritage Collection →</span>
+          </button>
+          <button class="hero-btn-secondary" data-navigate="food">
+            <span style="display:flex;align-items:center;gap:10px;">🔥 Imperial Menu</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Scroll Indicator -->
+      <div class="scroll-indicator hero-anim" data-transform="translateY(10px)">
+        <span>Scroll</span>
+        <div class="scroll-line"></div>
+      </div>
+    </section>
+
+    <!-- Marquee Banner -->
+    <div class="marquee-banner">
+      <div class="marquee-track" id="marquee-track">
+        <div class="marquee-content">
+          <span>DRAGON MARKET</span><div class="marquee-dot"></div>
+          <span>FIVE MILLENNIA OF HERITAGE</span><div class="marquee-dot"></div>
+          <span>TRADITIONAL CLOTHING</span><div class="marquee-dot"></div>
+          <span>IMPERIAL CUISINE</span><div class="marquee-dot"></div>
+          <span>龍 鳳 絲 韻 華 禮</span><div class="marquee-dot"></div>
+        </div>
+        <div class="marquee-content">
+          <span>DRAGON MARKET</span><div class="marquee-dot"></div>
+          <span>FIVE MILLENNIA OF HERITAGE</span><div class="marquee-dot"></div>
+          <span>TRADITIONAL CLOTHING</span><div class="marquee-dot"></div>
+          <span>IMPERIAL CUISINE</span><div class="marquee-dot"></div>
+          <span>龍 鳳 絲 韻 華 禮</span><div class="marquee-dot"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Stats Bar -->
+    <div class="stats-bar">
+      <div class="stats-grid">
+        <div class="stat-item">
+          <div class="stat-number" data-target="5000" data-suffix="+">0</div>
+          <div class="stat-label">Years of Heritage</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-number" data-target="10">0</div>
+          <div class="stat-label">Traditional Garments</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-number" data-target="10">0</div>
+          <div class="stat-label">Authentic Dishes</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-number" data-target="8">0</div>
+          <div class="stat-label">Great Cuisines</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Heritage Bestsellers -->
+    <div class="showcase-section">
+      <div class="showcase-header">
+        <span style="color:var(--primary);font-size:1.5rem;">🔥</span>
+        <h2>Heritage Bestsellers</h2>
+        <div class="line"></div>
+        <button class="see-all" data-navigate="shop">See All <span style="display:inline-flex;">→</span></button>
+      </div>
+      <div class="showcase-scroll no-scrollbar" id="hero-showcase-clothing"></div>
+    </div>
+
+    <!-- Quote Section -->
+    <div class="quote-section">
+      <div class="quote-bg"></div>
+      <div class="quote-inner reveal-scale">
+        <div class="quote-mark">"</div>
+        <p class="quote-text">Clothing is the embodiment of civilization. Each stitch in a Hanfu carries the wisdom of a thousand years, each fold tells the story of an empire.</p>
+        <div class="quote-divider">
+          <div class="line"></div>
+          <span>Ancient Chinese Proverb</span>
+          <div class="line"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Food Showcase -->
+    <div class="food-showcase">
+      <div class="food-showcase-bg">
+        <div class="orb1"></div>
+        <div class="orb2"></div>
+      </div>
+      <div style="position:relative;z-index:1;">
+        <div class="showcase-header" style="padding:0 20px;">
+          <span style="color:var(--gold);font-size:1.5rem;">✨</span>
+          <h2 style="color:white;">Imperial Cuisine</h2>
+          <div class="line" style="background:linear-gradient(to right,rgba(255,255,255,0.1),transparent);"></div>
+          <button class="see-all" style="color:var(--gold);" data-navigate="food">Full Menu <span style="display:inline-flex;">→</span></button>
+        </div>
+        <div class="food-grid" id="hero-food-grid"></div>
+      </div>
+    </div>
+
+    <!-- Heritage CTA -->
+    <div class="heritage-cta">
+      <div class="heritage-cta-bg">
+        <img src="images/heritage/tea-house.jpg" alt="Traditional Tea House">
+        <div class="overlay1"></div>
+        <div class="overlay2"></div>
+      </div>
+      <span class="floating-char" style="left:8%;top:20%;font-size:100px;">道</span>
+      <span class="floating-char" style="left:88%;top:30%;font-size:80px;">和</span>
+      <div class="heritage-cta-content reveal">
+        <span class="label">The Way of Heritage</span>
+        <h2>Five Thousand Years<br><span class="text-gradient-gold">of Living Heritage</span></h2>
+        <p>From the ancient silk looms of the Yellow River to the imperial kitchens of the Forbidden City, discover the philosophy, artistry, and traditions behind China's magnificent cultural heritage and the artisans keeping these sacred crafts alive today.</p>
+        <button class="btn-outline-gold" data-navigate="heritage">
+          Explore Heritage Archive →
+        </button>
+      </div>
+    </div>
+
+    <!-- Testimonials -->
+    <div class="testimonials-section">
+      <div class="testimonials-header reveal">
+        <span class="label">What Our Patrons Say</span>
+        <h2>Voices of the <span class="text-gradient-gold">Imperial Court</span></h2>
+        <p>Over 10,000 satisfied patrons worldwide trust Dragon Market for authentic heritage.</p>
+      </div>
+      <div class="testimonials-track-wrap">
+        <div class="testimonials-track" id="testimonials-track"></div>
+      </div>
+      <div class="testimonials-nav">
+        <button class="testimonials-nav-btn" id="testimonials-prev" aria-label="Previous">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m15 18-6-6 6-6"/></svg>
+        </button>
+        <div class="testimonials-dots" id="testimonials-dots"></div>
+        <button class="testimonials-nav-btn" id="testimonials-next" aria-label="Next">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- Footer Banner -->
+    <div class="footer-banner">
+      <div class="footer-banner-inner">
+        <div>
+          <h3 style="font-family:var(--font-display);font-size:1.2rem;font-weight:700;">Ready to explore?</h3>
+          <p style="color:var(--secondary);font-size:0.85rem;">Browse our full collection or contact us for bespoke inquiries.</p>
+        </div>
+        <div class="footer-banner-buttons">
+          <button class="btn-dark" data-navigate="shop">Shop Collection</button>
+          <button class="btn-outline-dark" data-navigate="contact">Contact Us</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════
+       PAGE: SHOP
+       ══════════════════════════════════════════ -->
+  <div id="page-shop" class="page-section">
+    <div class="page-container">
+      <div class="breadcrumbs">
+        <button data-navigate="home">Home</button>
+        <span class="breadcrumb-sep">›</span>
+        <span class="breadcrumb-current">Heritage Clothing</span>
+      </div>
+      <div class="page-header">
+        <h1>Traditional Heritage Collection</h1>
+        <p>Discover 10 authentic traditional Chinese garments spanning five thousand years of civilization. From imperial Hanfu and elegant Qipao to Miao ethnic embroidery and martial arts uniforms.</p>
+      </div>
+      <div class="filter-bar no-scrollbar" id="shop-mobile-filters"></div>
+      <div class="shop-layout">
+        <aside class="shop-sidebar">
+          <div class="shop-sidebar-section">
+            <h3>Categories</h3>
+            <ul id="shop-sidebar-cats"></ul>
+          </div>
+          <div class="shop-sidebar-section">
+            <h3>Dynasty</h3>
+            <ul>
+              <li><div class="sidebar-check"></div>Tang Dynasty</li>
+              <li><div class="sidebar-check"></div>Song Dynasty</li>
+              <li><div class="sidebar-check"></div>Ming Dynasty</li>
+              <li><div class="sidebar-check"></div>Qing Dynasty</li>
+              <li><div class="sidebar-check"></div>Ethnic Minority</li>
+            </ul>
+          </div>
+          <div class="shop-sidebar-section">
+            <h3>Price Range</h3>
+            <div style="display:flex;flex-direction:column;gap:16px;">
+              <input type="range" style="accent-color:var(--primary);width:100%;" min="89" max="899" value="899">
+              <div style="display:flex;justify-content:space-between;font-size:0.6rem;text-transform:uppercase;letter-spacing:0.15em;color:var(--secondary);">
+                <span>$89</span><span>$899</span>
+              </div>
+            </div>
+          </div>
+        </aside>
+        <div class="product-grid" id="product-grid"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════
+       PAGE: FOOD
+       ══════════════════════════════════════════ -->
+  <div id="page-food" class="page-section">
+    <section class="food-hero">
+      <img src="images/food/hot-pot.jpg" alt="Traditional Chinese Cuisine">
+      <div class="food-hero-overlay"></div>
+      <div class="food-hero-content">
+        <span class="label">Five Thousand Years of Flavor</span>
+        <h1>Imperial Menu</h1>
+        <p class="subtitle">10 Authentic Traditional Chinese Dishes</p>
+      </div>
+    </section>
+    <div class="page-container">
+      <div class="food-banquet reveal">
+        <div class="food-banquet-text">
+          <div class="badge">Traditional Dining Experience</div>
+          <h2 style="font-family:var(--font-display);font-size:clamp(1.5rem,4vw,2.2rem);font-weight:700;">The Imperial Banquet Hall</h2>
+          <p>Step into the splendor of a traditional Chinese banquet. Our chefs prepare authentic recipes passed down through generations, using time-honored techniques from the imperial kitchens of Beijing, the tea houses of Hangzhou, and the fiery kitchens of Sichuan.</p>
+          <div class="food-banquet-features">
+            <div class="food-banquet-feature">📍 Beijing Heritage Wing</div>
+            <div class="food-banquet-feature">⭐ 8 Great Cuisines</div>
+          </div>
+          <button class="btn-dark" style="background:var(--deep-black);font-family:var(--font-display);font-size:0.6rem;text-transform:uppercase;letter-spacing:0.15em;padding:16px 40px;font-weight:700;">Reserve a Banquet</button>
+        </div>
+        <div class="food-banquet-images">
+          <img src="images/food/xiaolongbao.jpg" alt="Shanghai Xiaolongbao">
+          <img src="images/food/tea-ceremony.jpg" alt="Tea Ceremony">
+        </div>
+      </div>
+      <div style="margin-bottom:64px;">
+        <div class="food-menu-header">
+          <div>
+            <h3 style="font-family:var(--font-display);font-size:1.3rem;text-transform:uppercase;font-weight:700;">Traditional Chinese Dishes</h3>
+            <p style="color:var(--secondary);font-size:0.85rem;">Authentic recipes from across China's eight great culinary traditions.</p>
+          </div>
+        </div>
+        <div class="filter-bar no-scrollbar" id="food-filters" style="margin-bottom:48px;"></div>
+        <div class="food-grid-cards" id="food-grid-cards"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════
+       PAGE: HERITAGE
+       ══════════════════════════════════════════ -->
+  <div id="page-heritage" class="page-section heritage-page">
+    <section class="heritage-hero">
+      <div class="heritage-dots-bg"></div>
+      <div class="heritage-hero-content">
+        <span class="label">Five Thousand Years of Civilization</span>
+        <h1>Heritage Archive</h1>
+        <div class="heritage-hero-line"></div>
+        <p>From the ancient silk looms of the Yellow River to the imperial courts of the Forbidden City. Discover the philosophy, artistry, and traditions behind China's magnificent cultural heritage.</p>
+      </div>
+    </section>
+    <div class="timeline" id="heritage-timeline"></div>
+    <div class="manifest-section reveal">
+      <h2>Our Manifest</h2>
+      <blockquote>"To honor the past is to understand the future. Every stitch, every recipe, every tradition we preserve is a thread connecting us to five thousand years of wisdom. We do not merely sell clothing and food — we are guardians of a living heritage that must never be forgotten."</blockquote>
+      <div class="attribution">Dragon Market Heritage Foundation</div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════
+       PAGE: OFFERS
+       ══════════════════════════════════════════ -->
+  <div id="page-offers" class="page-section">
+    <div class="page-container">
+      <div class="offers-header reveal">
+        <span style="font-size:2.5rem;">⚡</span>
+        <h1>Privileged Offers</h1>
+        <p>Exclusive rewards for our most discerning patrons. Use these ceremonial codes at checkout to unlock your benefits.</p>
+      </div>
+      <!-- Countdown Timer -->
+      <div class="countdown-banner reveal">
+        <div class="countdown-banner-label">⏳ Limited Time Imperial Sale</div>
+        <div class="countdown-banner-title">Exclusive Collection Drop Ends In</div>
+        <div class="countdown-grid">
+          <div class="countdown-unit">
+            <div class="countdown-num" id="cd-days">00</div>
+            <div class="countdown-label">Days</div>
+          </div>
+          <div class="countdown-sep">:</div>
+          <div class="countdown-unit">
+            <div class="countdown-num" id="cd-hours">00</div>
+            <div class="countdown-label">Hours</div>
+          </div>
+          <div class="countdown-sep">:</div>
+          <div class="countdown-unit">
+            <div class="countdown-num" id="cd-mins">00</div>
+            <div class="countdown-label">Minutes</div>
+          </div>
+          <div class="countdown-sep">:</div>
+          <div class="countdown-unit">
+            <div class="countdown-num" id="cd-secs">00</div>
+            <div class="countdown-label">Seconds</div>
+          </div>
+        </div>
+      </div>
+      <div class="offers-grid" id="offers-grid"></div>
+      <div class="inner-circle-section reveal">
+        <h2>Join the Inner Circle</h2>
+        <p>Be the first to receive invitation-only collection drops and imperial events.</p>
+        <div class="inner-circle-form">
+          <input type="email" placeholder="imperial@legacy.com">
+          <button onclick="showToast('Subscribed to the Inner Circle!')">Subscribe</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════
+       PAGE: CONTACT
+       ══════════════════════════════════════════ -->
+  <div id="page-contact" class="page-section">
+    <div class="page-container">
+      <div class="page-header">
+        <h1>Connect With Us</h1>
+        <p>Experience imperial service. Reach out for bespoke inquiries, order assistance, or heritage consultations.</p>
+      </div>
+      <div class="contact-grid">
+        <div class="contact-form-card reveal-left">
+          <form id="contact-form" class="contact-form">
+            <div class="form-row">
+              <div class="form-group">
+                <label>Full Name</label>
+                <input class="form-input" placeholder="Enter your name" required>
+              </div>
+              <div class="form-group">
+                <label>Email Address</label>
+                <input class="form-input" type="email" placeholder="Enter your email" required>
+              </div>
+            </div>
+            <div class="form-group">
+              <label>Subject</label>
+              <select class="form-input" style="color:var(--secondary);">
+                <option>Select an inquiry type</option>
+                <option>Bespoke Tailoring</option>
+                <option>Order Status</option>
+                <option>Heritage Consultation</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Message</label>
+              <textarea class="form-input form-textarea" placeholder="How may we assist you?" required></textarea>
+            </div>
+            <button type="submit" class="form-submit">
+              Send Message →
+            </button>
+          </form>
+        </div>
+        <div class="contact-info reveal-right">
+          <div class="contact-locations">
+            <div class="contact-location">
+              <h3>📍 Shanghai HQ</h3>
+              <p>The Bund, Zhongshan East 1st Rd<br>Huangpu District, Shanghai, China</p>
+            </div>
+            <div class="contact-location">
+              <h3>📍 London Boutique</h3>
+              <p>15 Savile Row, Mayfair<br>London W1S 3PJ, United Kingdom</p>
+            </div>
+          </div>
+          <div class="contact-links">
+            <a href="tel:+862112345678" class="contact-link">
+              <div class="icon-circle">📞</div>
+              +86 21 1234 5678 (SH)
+            </a>
+            <a href="mailto:concierge@dragonmarket.com" class="contact-link">
+              <div class="icon-circle">✉️</div>
+              concierge@dragonmarket.com
+            </a>
+          </div>
+          <div class="contact-socials">
+            <h4>Follow Our Legacy</h4>
+            <div class="social-btns">
+              <button class="social-btn">IG</button>
+              <button class="social-btn">WX</button>
+              <button class="social-btn">PT</button>
+              <button class="social-btn">WB</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════
+       PAGE: WISHLIST
+       ════════════════════════════════════════ -->
+  <div id="page-wishlist" class="page-section">
+    <div class="page-container">
+      <div class="page-header">
+        <h1>My Wishlist</h1>
+        <p id="wishlist-count" style="color:var(--secondary);font-size:0.8rem;text-transform:uppercase;letter-spacing:0.15em;">0 Saved Items</p>
+      </div>
+      <div id="wishlist-items"></div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════
+       PAGE: PRODUCT DETAIL
+       ════════════════════════════════════════ -->
+  <div id="page-product-detail" class="page-section">
+    <div class="page-container">
+      <div id="product-detail-content"></div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════
+       PAGE: OUR STORY
+       ════════════════════════════════════════ -->
+  <div id="page-story" class="page-section">
+    <div class="story-hero">
+      <div class="story-hero-content">
+        <span class="label">Since 3000 BC</span>
+        <h1>Our <span class="text-gradient-gold">Story</span></h1>
+        <p>Dragon Market was born from a passionate vision: to bring the world's oldest living civilization's finest heritage clothing and authentic imperial cuisine to a global audience, preserving five millennia of artistry.</p>
+      </div>
+    </div>
+    <div class="story-values">
+      <div class="story-value-card reveal">
+        <span class="story-value-icon">🧵</span>
+        <h3>Master Artisans</h3>
+        <p>Every garment is handcrafted by certified heritage artisans using techniques unchanged for thousands of years.</p>
+      </div>
+      <div class="story-value-card reveal reveal-delay-1">
+        <span class="story-value-icon">🏯</span>
+        <h3>Imperial Heritage</h3>
+        <p>We source directly from families who have preserved these sacred traditions through generations of imperial service.</p>
+      </div>
+      <div class="story-value-card reveal reveal-delay-2">
+        <span class="story-value-icon">🌏</span>
+        <h3>Global Mission</h3>
+        <p>Shipping to 80+ countries, we are the bridge between China's five-thousand-year legacy and the modern world.</p>
+      </div>
+      <div class="story-value-card reveal reveal-delay-3">
+        <span class="story-value-icon">🌿</span>
+        <h3>Ethical Sourcing</h3>
+        <p>All silk, dyes, and materials are ethically sourced, respecting both artisan communities and the natural world.</p>
+      </div>
+    </div>
+    <div class="quote-section">
+      <div class="quote-bg"></div>
+      <div class="quote-inner reveal-scale">
+        <div class="quote-mark">"</div>
+        <p class="quote-text">We do not merely sell heritage — we are its guardians. Each thread we weave, each recipe we preserve, carries the living spirit of five thousand years of human ingenuity.</p>
+        <div class="quote-divider">
+          <div class="line"></div>
+          <span>— Dragon Market Founder</span>
+          <div class="line"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</main>
+
+<!-- ═══ FOOTER ═══ -->
+<footer class="site-footer">
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <div class="logo">Dragon Market</div>
+      <div class="copyright">© 2026 Dragon Market.<br>Imperial Modernism.</div>
+    </div>
+    <div class="footer-col">
+      <h4>Heritage</h4>
+      <button data-navigate="heritage">Bespoke Tailoring</button>
+      <button data-navigate="food">Culinary Roots</button>
+    </div>
+    <div class="footer-col">
+      <h4>Service</h4>
+      <span>Global Shipping</span>
+      <span>Privacy Policy</span>
+      <button data-navigate="contact">Contact Us</button>
+      <button data-navigate="offers" class="gold-link">Offers</button>
+    </div>
+    <div class="footer-col" style="justify-content:flex-start;">
+      <div class="footer-scroll-top">
+        <button onclick="window.scrollTo({top:0,behavior:'smooth'}); navigateTo('home');">↑</button>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<!-- ═══ CART SIDEBAR ═══ -->
+<div id="cart-overlay" class="cart-overlay"></div>
+<div id="cart-sidebar" class="cart-sidebar">
+  <div class="cart-header">
+    <h2 style="font-family:var(--font-display);font-size:1.1rem;font-weight:700;text-transform:uppercase;display:flex;align-items:center;gap:12px;">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+      Your Bag (<span id="cart-count-label">0</span>)
+    </h2>
+    <button id="cart-close-btn" class="cart-close" aria-label="Close cart">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+    </button>
+  </div>
+  <div class="cart-body" id="cart-items-body"></div>
+  <div class="cart-footer" id="cart-footer" style="display:none;">
+    <div class="cart-subtotal">
+      <span>Subtotal</span>
+      <span id="cart-subtotal">$0.00</span>
+    </div>
+    <p class="cart-footer-note">Shipping and taxes calculated at checkout.</p>
+    <button class="btn-checkout">Checkout Now →</button>
+    <button class="btn-view-bag" onclick="closeCart(); navigateTo('wishlist');">View Bag</button>
+  </div>
+</div>
+
+<!-- ═══ SEARCH OVERLAY ═══ -->
+<div id="search-overlay" class="search-overlay">
+  <div class="search-overlay-inner">
+    <div class="search-input-wrap">
+      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+      <input id="search-main-input" class="search-main-input" type="text" placeholder="Search heritage, food..." autocomplete="off">
+      <button class="search-close-btn" id="search-close-btn" aria-label="Close search">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+      </button>
+    </div>
+    <div class="search-results-label" id="search-results-label">Start typing to search...</div>
+    <div class="search-results-grid" id="search-results-grid"></div>
+  </div>
+</div>
+
+<!-- ═══ QUICK VIEW MODAL ═══ -->
+<div id="quickview-overlay" class="quickview-overlay">
+  <div class="quickview-modal">
+    <button class="quickview-close" id="quickview-close-btn" aria-label="Close">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+    </button>
+    <div id="quickview-content"></div>
+  </div>
+</div>
+
+<!-- ═══ AI CHAT WIDGET ═══ -->
+<button id="chat-fab" class="chat-fab" aria-label="Open chat">
+  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/><path d="M5 3v4"/><path d="M19 17v4"/><path d="M3 5h4"/><path d="M17 19h4"/></svg>
+  <span class="chat-fab-dot"></span>
+</button>
+<div id="chat-window" class="chat-window">
+  <div class="chat-header">
+    <div class="chat-header-left">
+      <div class="chat-avatar">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 8V4H8"/><rect width="16" height="12" x="4" y="8" rx="2"/><path d="M2 14h2"/><path d="M20 14h2"/><path d="M15 13v2"/><path d="M9 13v2"/></svg>
+      </div>
+      <div class="chat-header-info">
+        <h3>Heritage Concierge</h3>
+        <span>Imperial AI Presence</span>
+      </div>
+    </div>
+    <button id="chat-close-btn" class="chat-close" aria-label="Close chat">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+    </button>
+  </div>
+  <div class="chat-messages" id="chat-messages"></div>
+  <div class="chat-input">
+    <input id="chat-input" type="text" placeholder="Ask about heritage or style..." autocomplete="off">
+    <button id="chat-send-btn" aria-label="Send message">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m22 2-7 20-4-9-4Z"/><path d="M22 2 11 13"/></svg>
+    </button>
+  </div>
+</div>
+
+<!-- ═══ JAVASCRIPT ═══ -->
+<script src="js/app.js"></script>
+
+<!-- Dynamic Content Renderers -->
+<script>
+// Render Hero Showcase Clothing
+(function() {
+  const items = PRODUCTS.slice(0, 6);
+  const container = document.getElementById('hero-showcase-clothing');
+  if (!container) return;
+  container.innerHTML = items.map((p, i) => `
+    <div class="showcase-card" onclick="navigateTo('product-detail','${p.id}')" style="animation-delay:${i * 0.08}s;">
+      <div class="showcase-card-img">
+        <img src="${p.images[0]}" alt="${p.name}" loading="lazy">
+        ${p.isNew ? '<span class="card-badge new">New</span>' : ''}
+        ${p.originalPrice ? '<span class="card-badge sale">-' + Math.round((1 - p.price / p.originalPrice) * 100) + '%</span>' : ''}
+        <div class="showcase-card-overlay"></div>
+        <div class="showcase-card-btn">View Details</div>
+      </div>
+      <h4>${p.name}</h4>
+      <div class="showcase-price">$${p.price.toFixed(2)}${p.originalPrice ? '<span class="original">$' + p.originalPrice.toFixed(2) + '</span>' : ''}</div>
+    </div>
+  `).join('');
+})();
+
+// Render Hero Food Grid
+(function() {
+  const items = MENU_ITEMS.slice(0, 5);
+  const container = document.getElementById('hero-food-grid');
+  if (!container) return;
+  container.innerHTML = `
+    <div class="food-featured reveal-scale" onclick="navigateTo('food')">
+      <img src="${items[0].image}" alt="${items[0].name}" loading="lazy">
+      <div class="food-featured-overlay"></div>
+      <div class="food-featured-info">
+        <span class="category">${items[0].category}</span>
+        <h3>${items[0].name}</h3>
+        <p class="desc">${items[0].desc}</p>
+        <span class="price">$${items[0].price}</span>
+      </div>
+    </div>
+    <div class="food-small-grid">
+      ${items.slice(1, 5).map((item, i) => `
+        <div class="food-small-card reveal reveal-delay-${i+1}" onclick="navigateTo('food')">
+          <img src="${item.image}" alt="${item.name}" loading="lazy">
+          <div class="overlay"></div>
+          <div class="info">
+            <span class="category">${item.category}</span>
+            <h4>${item.name}</h4>
+            <span class="price">$${item.price}</span>
+          </div>
+        </div>
+      `).join('')}
+    </div>
+  `;
+})();
+
+// Render Shop Sidebar
+(function() {
+  const ul = document.getElementById('shop-sidebar-cats');
+  if (!ul) return;
+  let html = `<li class="sidebar-cat-item ${selectedShopCategory === 'All' ? 'active' : ''}" data-cat="All" onclick="setShopCategory('All')"><div class="sidebar-check"></div>All Traditional Wear</li>`;
+  SIDEBAR_CATS.forEach(cat => {
+    html += `<li class="sidebar-cat-item ${selectedShopCategory === cat ? 'active' : ''}" data-cat="${cat}" onclick="setShopCategory('${cat}')"><div class="sidebar-check"></div>${cat}</li>`;
+  });
+  ul.innerHTML = html;
+})();
+
+// Render Shop Mobile Filters
+(function() {
+  const container = document.getElementById('shop-mobile-filters');
+  if (!container) return;
+  const cats = ['All', ...SIDEBAR_CATS];
+  container.innerHTML = cats.map(cat => `
+    <button class="filter-btn shop-filter-btn ${selectedShopCategory === cat ? 'active' : ''}" data-cat="${cat}" onclick="setShopCategory('${cat}')">${cat}</button>
+  `).join('');
+})();
+
+// Render Food Filters
+(function() {
+  const container = document.getElementById('food-filters');
+  if (!container) return;
+  container.innerHTML = FOOD_CATS.map(cat => `
+    <button class="filter-btn food-filter-btn ${selectedFoodCategory === cat ? 'active' : ''}" data-cat="${cat}" onclick="setFoodCategory('${cat}')">${cat}</button>
+  `).join('');
+})();
+
+// Render Heritage Timeline
+(function() {
+  const container = document.getElementById('heritage-timeline');
+  if (!container) return;
+  container.innerHTML = HERITAGE_JOURNEYS.map((j, idx) => `
+    <div class="timeline-item ${idx % 2 === 0 ? 'reveal-left' : 'reveal-right'}">
+      <div class="timeline-img">
+        <div class="timeline-img-inner">
+          <img src="${j.img}" alt="${j.title}" loading="lazy">
+        </div>
+        <div class="timeline-year">${j.year}</div>
+      </div>
+      <div class="timeline-text">
+        <span class="chapter">Chapter ${idx + 1}</span>
+        <h2>${j.title}</h2>
+        <p>${j.desc}</p>
+        <ul class="timeline-details">
+          ${j.details.map(d => `<li><div class="dot"></div>${d}</li>`).join('')}
+        </ul>
+      </div>
+    </div>
+  `).join('');
+})();
+
+// Render Offers Grid
+(function() {
+  const container = document.getElementById('offers-grid');
+  if (!container) return;
+  container.innerHTML = OFFERS.map((offer, idx) => `
+    <div class="offer-card reveal reveal-delay-${idx+1}">
+      <div class="offer-card-top ${offer.color}"></div>
+      <div class="offer-card-body">
+        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="color:var(--surface-highest);margin-bottom:24px;transition:var(--transition-smooth);"><path d="M2 9a3 3 0 0 1 0 6v2a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-2a3 3 0 0 1 0-6V7a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2Z"/><path d="M13 5v2"/><path d="M13 17v2"/><path d="M13 11v2"/></svg>
+        <h3>${offer.title}</h3>
+        <div class="discount">${offer.discount}</div>
+        <p class="desc">${offer.description}</p>
+        <div class="offer-code">
+          <div class="dashed-border"></div>
+          <div class="offer-code-inner">
+            ${offer.code}
+            <button class="copy-btn" onclick="copyOfferCode('${offer.code}', this)">Copy</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  `).join('');
+})();
+
+// Render Initial Chat Messages
+(function() {
+  const msgs = document.getElementById('chat-messages');
+  if (!msgs) return;
+  msgs.innerHTML = chatMessages.map(m => `
+    <div class="chat-msg ${m.role === 'user' ? 'user' : 'bot'}">
+      <div class="chat-bubble">${m.text}</div>
+    </div>
+  `).join('');
+})();
+</script>
+
+</body>
+</html>
